@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章列表_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}page.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}articleList.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}admin/common.js"></script>
+    <script src="{$Think.config.JS}home/page.js"></script>
+    <script type="text/javascript">
+        //文章列表显示
+        function showList(page,page_size,keyItem,key,com){
+            page=page||1;
+            page_size=page_size||20;
+            keyItem=keyItem||'id';
+            key=key||'';
+            com=com||'eq';
+            var article_type_id=$('#article_type_id').val();
+            var sHtml_loading='<div class="loading"><img src="{$Think.config.HOST_DIR}Public/images/loading.gif" width="100px" /></div>';
+            $('#article_list_div').html(sHtml_loading);
+            $.ajax({
+                url:"{$Think.config.HOST_DIR}Home/Article/articleListPage",
+                type:"post",
+                data:{"page":page,"page_size":page_size,article_type_id:article_type_id},
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        var sHtml='';
+                        var article=data.article;
+                        if(article.length>0) {
+                            //拼接数据列表
+                            for (var i = 0; i < article.length; i++) {
+                                sHtml+='<p>';
+                                sHtml+='<a href="{$Think.config.HOST_DIR}Home/Article/index/article_id/'+article[i]['id']+'.{$Think.config.URL_HTML_SUFFIX}" title="'+article[i]['title']+'" target="_target">'+str_sub(article[i]['title'],40)+'</a>';
+                                sHtml+='<span>'+article[i]['create_time']+'</span>';
+                                sHtml+='</p>';
+                                if(i%5 == 4){
+                                    sHtml+='<p class="line"></p>';
+                                }
+                            }
+                            $('#article_list_div').html(sHtml);
+                            //生成分页条
+                            getPageBar(page,Math.ceil(data.count/page_size),data.count,page_size);
+                        }else{
+                            $('#article_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                        }
+                    }else{
+                        $('#article_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                    }
+                },
+                error:function(data){
+                    console.log('showList>error');
+                    console.log(data.responseText);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<input type="hidden" value="{$article_type_op.id}" id="article_type_id" />
+<div class="article">
+    <div class="article_type_div">
+        <!--用户信息-->
+        <if condition="$member neq null">
+            <p>
+                <img src="{$Think.config.UPLOAD}{$member['head_pic']}" width="30px" height="30px" />
+                <span><a href="{:U('Member/index',array('member_id'=>$member['id']))}">{$member.member_name}</a></span>
+            </p>
+        </if>
+        <!--文章分类列表-->
+        <ul>
+            <volist name="articleType" id="articleType" offset="0" empty="$empty">
+                <if condition="$articleType['id'] eq $article_type_op['id']">
+                    <a href="javascript:void(0);"><li class="op">{$articleType.article_type_name}</li></a>
+                    <else />
+                    <a href="{:U('Article/articleList',array('article_type_id'=>$articleType['id']))}"><li>{$articleType.article_type_name}</li></a>
+                </if>
+            </volist>
+        </ul>
+    </div>
+    <div class="article_div">
+        <!--当前文章分类-->
+        <div class="article_list_title">
+            <span>{$article_type_op.article_type_name}</span>
+        </div>
+        <!--文章列表-->
+        <div class="article_list_div" id="article_list_div">
+            <volist name="article" id="article" offset="0" empty="$empty">
+                <p>
+                    <a href="{:U('Article/index',array('article_id'=>$article['id']))}" title="{$article.title}" target="_blank">{$article.title|substr_mb=0,40}</a>
+                    <span>{$article.create_time}</span>
+                </p>
+                <if condition="$key%5 eq 4">
+                    <p class="line"></p>
+                </if>
+            </volist>
+        </div>
+        <!--分页条-->
+        <if condition="$article neq null">
+            <div class="page_div" id="page_div">
+                <span class="page"><a href="javascript:void(0);">首页</a></span>
+                <span class="page"><a href="javascript:void(0);">上一页</a></span>
+                <label id="curpage">1</label> /
+                <label id="page_count">{$pageCount}</label>
+                <if condition="$pageCount gt 1">
+                    <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                    <span class="page hov"><a href="javascript:void(0);" rel="{$pageCount}">末页</a></span>
+                    <else />
+                    <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                    <span class="page"><a href="javascript:void(0);">末页</a></span>
+                </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+                <span>共{$count}条数据</span>
+            </div>
+        </if>
+
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

@@ -1,0 +1,32 @@
+<div class="left_div">
+    <div class="left_menu">
+        <ul>
+            <p>{$Think.session.ADMIN.admin_name}</p>
+            <a href="{$Think.config.HOST_DIR}Admin/Admin/index">
+                <li <php> if($model=="Admin" && $action=="index") echo "class='sel'"; </php>>管理员管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/Member/index">
+                <li <php> if($model=="Member") echo "class='sel'"; </php>>用户管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/Article/index">
+                <li <php> if($model=="Article") echo "class='sel'"; </php>>文章管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/ArticleType/index">
+                <li <php> if($model=="ArticleType") echo "class='sel'"; </php>>文章类别管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/Photo/index">
+                <li <php> if($model=="Photo") echo "class='sel'"; </php>>相册管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/PhotoImg/index">
+                <li <php> if($model=="PhotoImg") echo "class='sel'"; </php>>相片管理</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/Complaint/index">
+                <li <php> if($model=="Complaint") echo "class='sel'"; </php>>申诉审核</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Admin/Admin/updatePasswd">
+                <li <php> if($model=="Admin" && $action=="updatePasswd") echo "class='sel'"; </php>>修改密码</li>
+            </a>
+            <a href="{:U('Admin/logout')}"><li>退出</li></a>
+        </ul>
+    </div>
+</div>

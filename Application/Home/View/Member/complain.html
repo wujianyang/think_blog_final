@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账号申诉_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css"/>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}login.css"/>
+    <script type="text/javascript" src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        function getVerify() {
+            $('.vImg').attr('src',"{:U('Member/getVerify')}");
+        }
+    </script>
+</head>
+<body>
+<div id="login">
+    <input type="hidden" value="{$Think.config.HOST_DIR}" id="host_dir" />
+    <input type="hidden" value="{$Think.config.UPLOAD}" id="upload" />
+    <input type="hidden" value="{$Think.config.UPLOAD_PATH}" id="upload_path" />
+    <input type="hidden" value="{$Think.config.URL_HTML_SUFFIX}" id="suffix" />
+    <h1>账号申诉</h1>
+    <form id="login_form" name="login_form" method="post" action="{:U('Member/complain')}">
+        <input type="hidden" value="" id="pre_url" />
+        <input type="text" required="required" placeholder="用户名" name="member_name"></input>
+        <textarea required="required" placeholder="申诉内容" name="complain_content" style="height:100px;padding-top:10px;"></textarea>
+        <input type="text" required="required" placeholder="验证码" name="vCode" class="vcodeInput"></input>
+        <img src="{:U('Member/getVerify')}" class="vImg" onclick="getVerify()" title="点击更换验证码" />
+        <button class="but" type="submit">申诉</button>
+        <if condition="$msg neq ''">
+            <div style="color:#f30;text-align:center;">{$msg}</div>
+        </if>
+    </form>
+</div>
+</body>
+</html>

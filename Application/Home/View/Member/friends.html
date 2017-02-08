@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <if condition="$Think.get.f eq focus">
+            关注列表
+            <elseif condition="$Think.get.f eq fans" />
+            粉丝列表
+            <else />
+            用户列表
+        </if>
+        _{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}page.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}friends.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}ajax.js"></script>
+    <script src="{$Think.config.JS}admin/common.js"></script>
+    <script src="{$Think.config.JS}home/page.js"></script>
+    <script src="{$Think.config.JS}home/friends.js"></script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<input type="hidden" value="{$Think.get.f}" id="f" />
+<input type="hidden" value="{$Think.get.member_id}" id="member_id" />
+<div class="friends_div">
+    <div class="friends_title">
+        <if condition="$data.member neq null">
+        <a href="{:U('Member/index',array('member_id'=>$data['member']['id']))}">{$data.member.member_name}</a> >>
+        </if>
+        <if condition="$Think.get.f eq focus">
+            <span>关注列表</spa n>
+            <elseif condition="$Think.get.f eq fans" />
+            <span>粉丝列表</span>
+            <else />
+            <span>用户列表</span>
+            <input type="hidden" value="search" id="page_search" />
+            <input type="hidden" value="{$Think.get.key}" id="keys_search" />
+            <input type="hidden" value="{$Think.get.keyItem}" id="keyItem_search" />
+        </if>
+    </div>
+    <ul id="list">
+        <volist name="data.rows" id="rows" offset="0" length="20" empty="$empty">
+            <li>
+                <p>
+                    <img src="{$Think.config.UPLOAD}{$rows.head_pic}" width="40" height="40" />
+                    <span><a href="{:U('Member/index',array('member_id'=>$rows['member_id']))}">{$rows.member_name}</a></span>
+                </p>
+                <p>
+                    <if condition="$rows.sex eq 1">
+                        <label>性别：<span>男</span></label>
+                        <elseif condition="$rows.sex eq 0" />
+                        <label>性别：<span>女</span></label>
+                    </if>
+                </p>
+                <p><label>访问量：<span>{$rows.hitnum}</span></label></p>
+                <p>
+                    <span><a href="{:U('Member/friends',array('member_id'=>$rows['member_id'],'f'=>'focus'))}">关注({$rows.focus_count})</a></span>
+                    <span><a href="{:U('Member/friends',array('member_id'=>$rows['member_id'],'f'=>'fans'))}">粉丝({$rows.fans_count})</a></span>
+                </p>
+                    <if condition="$rows['member_id'] neq $data['curr_member_id']">
+                        <if condition="$rows.isfocus eq 1">
+                            <div class="btn cencelFocus" rel="{$rows.member_id}">取消关注</div>
+                            <else />
+                            <div class="btn focus" rel="{$rows.member_id}">关注</div>
+                        </if>
+                    </if>
+            </li>
+        </volist>
+        <div class="clear"></div>
+    </ul>
+    <if condition="$data.pageCount gt 0">
+        <div class="page_div" id="page_div">
+            <span class="page"><a href="javascript:void(0);">首页</a></span>
+            <span class="page"><a href="javascript:void(0);">上一页</a></span>
+            <label id="curpage">1</label> /
+            <label id="page_count">{$data.pageCount}</label>
+            <if condition="$data.pageCount eq 1">
+                <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                <span class="page"><a href="javascript:void(0);">末页</a></span>
+                <else />
+                <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                <span class="page hov"><a href="javascript:void(0);" rel="{$data.pageCount}">末页</a></span>
+            </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+            <span>共{$data.count}条数据</span>
+        </div>
+    </if>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

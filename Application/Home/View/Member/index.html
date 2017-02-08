@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$member.member_name}_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}index.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.config.js" charset="utf-8"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.all.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8" src="{$Think.config.PLUGINS}ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            UE.getEditor('editor');
+            $('body').on("click",'#mess',function(){
+                var content=UE.getEditor('editor').getContent();
+                var member_id=$('#member_id').val();
+                $.ajax({
+                    url:"{$Think.config.HOST_DIR}Home/Mess/mess",
+                    type:"post",
+                    data:{member_id:member_id,content:content},
+                    dataType:"json",
+                    success:function(data){
+                        alert(data.msg);
+                        UE.getEditor('editor').setContent("");
+                    },error:function(data){
+                        console.log('comment>error');
+                        console.log(data.responseText);
+                    }
+                });
+            });
+
+            //关注用户
+            $('body').on('click','.focus',function(){
+                var member_id=$(this).attr('rel');
+                var host_dir=$('#host_dir').val();
+                $.ajax({
+                    url:host_dir+"Home/Member/focusFriends",
+                    type:"post",
+                    data:{"member_id":member_id},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status==1){
+                            location.replace(location);
+                        }else{
+                            alert(data.msg);
+                            if(data.msg=='登录超时'){
+                                location.href=host_dir+"Home/Member/login.html";
+                            }
+                        }
+                    },
+                    error:function(data){
+                        console.log('focus>error');
+                        console.log(data.responseText);
+                    }
+                });
+            });
+
+            //取消关注用户
+            $('body').on('click','.cencelFocus',function(){
+                var member_id=$(this).attr('rel');
+                var host_dir=$('#host_dir').val();
+                $.ajax({
+                    url:host_dir+"Home/Member/focusFriends",
+                    type:"post",
+                    data:{"member_id":member_id,isCencel:'cencel'},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status==1){
+                            location.replace(location);
+                        }else{
+                            alert(data.msg);
+                            if(data.msg=='登录超时'){
+                                location.href=host_dir+"Home/Member/login.html";
+                            }
+                        }
+                    },
+                    error:function(data){
+                        console.log('focus>error');
+                        console.log(data.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="main_area">
+    <include file="./Application/Home/View/Member/infoHeader.html" />
+    <div class="show_area">
+        <div class="left_area">
+            <div class="left_title">
+                <span>文章列表</span>
+                <a class="more" href="{:U('Article/articleList',array('member_id'=>$article[0]['member_id']),'html')}">更多>></a>
+            </div>
+            <volist name="article" id="article" offset="0" length="5" empty="$empty">
+                <div class="article_area">
+                    <p class="article_title"><a href="{:U('Article/index',array('article_id'=>$article['article_id']),'html')}" title="{$article.title}" target="_blank">{$article.title|substr_mb=0,80,'utf-8'}</a></p>
+                    <p class="article_content">{$article.content|strip_tags|substr_mb=0,105,'utf-8'}</p>
+                    <div class="article_info">
+                        <div class="article_author">作者：<a href="{:U('Member/index',array('member_id'=>$article['member_id']))}">{$article.member_name}</a></div>
+                        <div class="article_type">文章类型：<a href="{:U('Article/articleList',array('article_type_id'=>$article['article_type_id']))}">{$article.article_type_name}</a></div>
+                        <div class="article_time">撰写时间：{$article.create_time}</div>
+                        <div class="article_hitnum">访问量：{$article.hitnum}</div>
+                        <div class="article_comment"><a href="{:U('Article/index#comment',array('article_id'=>$article['article_id']))}" target="_blank">评论({$article.article_comment_count})</a></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </volist>
+            <div class="write_mess_div">
+                <div class="left_title">
+                    <span>留言区</span>
+                </div>
+                <script id="editor" type="text/plain" style="width:700px;height:100px;"></script>
+                <input type="button" value="留言" id="mess" />
+            </div>
+        </div>
+        <div class="right_area">
+            <div class="article_hot">
+                <div class="article_hot_title">
+                    <span>热门文章排行</span>
+                    <a class="more" href="{:U('Article/hotArticleList',array('member_id'=>$member['id']))}">更多>></a>
+                </div>
+                <div class="article_hot_list">
+                    <volist name="hotArticle" id="hotArticle" offset="0" length="5" empty="$empty">
+                        <p><a href="{:U('Article/index',array('article_id'=>$hotArticle['article_id']))}" target="_blank" title="{$hotArticle.title}">{$hotArticle.title|substr_mb=0,16,'utf-8'}</a><span>{$hotArticle.hitnum}</span></p>
+                    </volist>
+                </div>
+            </div>
+            <div class="article_type_div">
+                <div class="article_type_title">
+                    <span>文章分类</span>
+                    <a class="more" href="{:U('Article/articleList',array('member_id'=>$member['id']))}">更多>></a>
+                </div>
+                <div class="article_type_list">
+                    <volist name="articleType" id="articleType" offset="0" length="10" empty="$empty">
+                        <div class="article_type_d"><a href="{:U('Article/articleList',array('article_type_id'=>$articleType['article_type_id']))}" title="{$articleType.article_type_name}">{$articleType.article_type_name}(<span>{$articleType.article_count|substr_mb=0,6,'utf-8'}</span>)</a></div>
+                    </volist>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="photo_div">
+                <div class="photo_title">
+                    <span>相册分类</span>
+                    <a class="more" href="{:U('Photo/index',array('member_id'=>$member['id']))}">更多>></a>
+                </div>
+                <div class="photo_list">
+                    <volist name="photo" id="photo" offset="0" length="10" empty="$empty">
+                        <div class="photo_d"><a href="{:U('Photo/index',array('photo_id'=>$photo['photo_id']))}" title="{$photo.photo_title}">{$photo.photo_title}(<span>{$photo.photo_count}</span>)</a></div>
+                    </volist>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="mess_div">
+                <div class="mess_title">
+                    <span>留言板</span>
+                    <a class="more" href="{:U('Mess/index',array('member_id'=>$member['id']))}">更多>></a>
+                </div>
+                <div class="mess_list">
+                    <volist name="mess" id="mess" offset="0" length="10" empty="$empty">
+                        <div class="mess_d">
+                            <a href="{:U('Member/index',array('member_id'=>$mess['messer_id']))}">{$mess.member_name}</a>：{$mess.content}
+                        </div>
+                    </volist>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

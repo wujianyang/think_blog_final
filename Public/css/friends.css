@@ -1,0 +1,13 @@
+.friends_div{width:990px;min-height:520px;margin:10px auto;padding:5px;border:solid #ddd 1px;}
+.friends_title{border-bottom:solid #999 1px;padding:5px 0;font-weight: bold;}
+.friends_title a{color: #000;}
+.friends_title a:hover{text-decoration: underline;}
+.friends_div ul{padding:0;width:990px;}
+.friends_div li{float:left;margin:10px 0 0 10px;list-style:none;width:185px;height:120px;border:solid #eee 1px;border-radius: 10px;text-align: center;}
+.friends_div li:hover{background: #eee;cursor: pointer;}
+.friends_div li p{line-height: 9px;padding:0 5px;color:#666;}
+.friends_div li .btn{width:90%;margin:-10px auto;text-align:center;border-radius: 10px;background:#ddd;cursor: pointer;color:#fff;}
+.friends_div li .focus{background: #bbb;}
+.friends_div li .focus:hover{background: #666;}
+.friends_div li p img{float:left;border-radius: 20px;margin:-8px 10px 0 0;}
+.friends_div li p a:hover{text-decoration: underline;color:#666;}

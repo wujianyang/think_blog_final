@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>申诉审核_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}admin.css" />
+    <script language="JavaScript" src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script language="JavaScript" src="{$Think.config.JS}ajax.js"></script>
+    <script language="JavaScript" src="{$Think.config.JS}admin/common.js"></script>
+    <script language="JavaScript" src="{$Think.config.JS}admin/page.js"></script>
+    <script language="JavaScript" src="{$Think.config.JS}admin/complaintAdmin.js"></script>
+    <script type="text/javaScript">
+
+    </script>
+    <style type="text/css">
+        .list_table{width:1000px;}
+        .page_div{display: block;}
+    </style>
+</head>
+<body>
+<include file="./Application/Admin/View/header.html" />
+<div class="main" >
+    <include file="./Application/Admin/View/left.html" />
+    <div class="right_div">
+        <div class="info_title">
+            <span>申诉审核</span>
+            <input type="hidden" value="{$Think.config.HOST_DIR}" id="host_dir" />
+            <input type="hidden" value="{$Think.config.UPLOAD}" id="upload" />
+            <input type="hidden" value="{$Think.config.UPLOAD_PATH}" id="upload_path" />
+            <input type="hidden" value="{$Think.config.URL_HTML_SUFFIX}" id="suffix" />
+        </div>
+        <div class="main_form">
+            <div id="list_div">
+                <div class="toolbar">
+                    <div class="lfloat">
+                        <input type="button" value="通过" id="pass" />
+                        <input type="button" value="忽略" id="ignore" />
+                    </div>
+                    <div class="rfloat">
+                        <select id="keyItem">
+                            <option value="notpass+eq">未审核</option>
+                            <option value="pass+eq">已审核</option>
+                            <option value="member_id+eq">用户ID</option>
+                            <option value="member_name+like">用户名</option>
+                            <option value="admin_id+eq">审核员ID</option>
+                            <option value="admin_name+like">审核员</option>
+                        </select>
+                        <input name="key" id="key" value="" placeholder="请输入关键字" required />
+                        <input type="button" value="搜索" id="search" />
+                    </div>
+                </div>
+                <div class="list_table_div mar_t20">
+                    <table class="list_table" cellspacing="1" cellpadding="0">
+                        <tr>
+                            <th><input type="checkbox" name="" id="all_id" /></th>
+                            <th width="50">ID</th>
+                            <th width="150">用户名</th>
+                            <th width="350">申诉内容</th>
+                            <th width="150">提交时间</th>
+                            <th width="150">审核员</th>
+                            <th width="150">审核时间</th>
+                        </tr>
+                        <tbody id="list_table_tbody">
+                        <volist name="data.rows" id="rows" offset="0" length="10">
+                            <tr class="tr_line">
+                                <td><input type="checkbox" class="id" name="id[]" value="{$rows.id}" /></td>
+                                <td>{$rows.id}</td>
+                                <td>{$rows.member_name}</td>
+                                <td>{$rows.complain_content}</td>
+                                <td>{$rows.complain_time}</td>
+                                <if condition="$rows.admin_name neq null">
+                                    <td>{$rows.admin_name}</td>
+                                    <else />
+                                    <td>未审核</td>
+                                </if>
+                                <if condition="$rows.admin_name neq null">
+                                    <td>{$rows.pass_time}</td>
+                                    <else />
+                                    <td>未审核</td>
+                                </if>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <if condition="$data['rows'] eq null">
+                        {$empty}
+                    </if>
+                </div>
+                <if condition="$data.count gt 0">
+                    <div class="page_div" id="page_div">
+                        <span class="page"><a href="javascript:void(0);">首页</a></span>
+                        <span class="page"><a href="javascript:void(0);">上一页</a></span>
+                        <label id="curpage">1</label> /
+                        <label id="page_count">{$data.pageCount}</label>
+                        <if condition="$data.pageCount eq 1">
+                            <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                            <span class="page"><a href="javascript:void(0);">末页</a></span>
+                            <else />
+                            <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                            <span class="page hov"><a href="javascript:void(0);" rel="{$data.pageCount}">末页</a></span>
+                        </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+                        <span>共{$data.count}条数据</span>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="./Application/Admin/View/footer.html" />
+
+</body>
+</html>

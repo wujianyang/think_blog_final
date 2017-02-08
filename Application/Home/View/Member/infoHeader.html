@@ -1,0 +1,44 @@
+<div class="info_area">
+    <div class="info_img">
+        <img src="{$Think.config.UPLOAD}{$member.head_pic}" width="100" height="100" />
+    </div>
+    <input type="hidden" value="{$member.id}" id="member_id" />
+    <div class="person_info">
+        <p>{$member.member_name}</p>
+        <p>
+            <a href="{:U('Member/friends',array('member_id'=>$member['id'],'f'=>'focus'))}">关注 {$focus_count}</a> |
+            <a href="{:U('Member/friends',array('member_id'=>$member['id'],'f'=>'fans'))}">粉丝 {$fans_count}</a>
+        </p>
+        <p>访问量 {$member.hitnum}</p>
+        <if condition="$isf neq ''">
+            <if condition="$isf eq 1">
+                <p><div class="btn cencelFocus" rel="{$member.id}">取消关注</div></p>
+                <elseif condition="$isf eq 2" />
+                <p><div class="btn focus" rel="{$member.id}">关注</div></p>
+            </if>
+        </if>
+    </div>
+    <!--
+        天气数据模块。本地测试正常，可能由于阿里云服务器上无法访问一个接口地址导致无数据，故取消
+    <div class="weather_area">
+        <if condition="$weather neq null">
+            <table style="width:300px;height:100px;margin: 0 auto;text-align: center;color:#666;font-family:微软雅黑;font-size:16px;">
+                <tr>
+                    <td colspan="2">[&nbsp;{$weather.city}&nbsp;]&nbsp;&nbsp;{$weather.dateT}</td>
+                </tr>
+                <tr>
+                    <td>天气：{$weather.weather}</td>
+                    <td>温度：{$weather.temperature}</td>
+                </tr>
+                <tr>
+                    <td>风速：{$weather.wind}</td>
+                    <td>PM2.5：{$weather.pm25}</td>
+                </tr>
+            </table>
+            <else />
+            <p>天气信息请求失败</p>
+        </if>
+    </div>
+    -->
+    <div class="clear"></div>
+</div>

@@ -1,0 +1,5 @@
+.info_div{width:990px;margin:10px auto;padding:5px;border:solid #ddd 1px;}
+.info_title{border-bottom: solid #999 1px;font-weight: bold;padding:5px 0;}
+.info_table{width:550px;margin:10px auto;}
+.info_table th{text-align: right;}
+.info_table td{line-height: 32px;}

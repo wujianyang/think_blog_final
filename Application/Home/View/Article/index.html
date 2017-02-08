@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$article.title}_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}page.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}article.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}home/articleComment.js"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.config.js" charset="utf-8"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.all.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8" src="{$Think.config.PLUGINS}ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            UE.getEditor('editor');
+            var fontSize=$('.fontBar .hov').attr('rel');
+            $('.article_content').addClass('font'+fontSize);
+            $('body').on("click",'.fontBar span',function(){
+                fontSize=$(this).attr('rel');
+                $('.article_content').removeClass('font0').removeClass('font1').removeClass('font2');
+                $('.article_content').addClass('font'+fontSize);
+                $('.fontBar span').removeClass('hov');
+                $(this).addClass('hov');
+            });
+            $('body').on("click",'#comment',function(){
+                var content=UE.getEditor('editor').getContent();
+                var article_id=$('#article_id').val();
+                $.ajax({
+                    url:"{$Think.config.HOST_DIR}Home/ArticleComment/comment",
+                    type:"post",
+                    data:{article_id:article_id,content:content},
+                    dataType:"json",
+                    success:function(data){
+                        alert(data.msg);
+                        if(data.status==1){
+                            UE.getEditor('editor').setContent("");
+                            showList(1,10);
+                        }
+                    },error:function(data){
+                        console.log('comment>error');
+                        console.log(data.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="article_div">
+    <div class="article_title">
+        <h1>{$article.title}</h1>
+    </div>
+    <div class="article_info">
+        <label>作者：<a href="{:U('Member/index',array('member_id'=>$article['member_id']),'html')}">{$article.member_name}</a></label>
+        <label>文章类型：<a href="{:U('Article/articleList',array('article_type_id'=>$article['article_type_id']),'html')}">{$article.article_type_name}</a></label>
+        <label>撰写时间：<span>{$article.create_time}</span></label>
+        <label>访问量：<span>{$article.hitnum}</span></label>
+        <label class="fontBar">
+            字体：<span rel="0">小</span>
+            <span class="hov" rel="1">中</span>
+            <span rel="2">大</span>
+        </label>
+    </div>
+    <div class="article_content">
+        {$article.content}
+    </div>
+    <div class="comment_div">
+        <div class="comment_title">
+            <span name="comment">评论区</span>
+        </div>
+        <script id="editor" type="text/plain" style="width:960px;height:100px;"></script>
+        <input type="button" value="评论" id="comment" />
+        <div class="clear"></div>
+        <p id="test"></p>
+        <div class="comment_list">
+            <div class="comment_list_title">
+                <span>网友评论</span>
+            </div>
+            <input type="hidden" id="article_id" value="{$article.article_id}" />
+            <div id="comment_list_div">
+            <volist name="articleComment" id="articleComment" offset="0" length="10" empty="$empty">
+                <div class="comment_d">
+                    <p>
+                        <img class="comment_member" src="{$Think.config.UPLOAD}{$articleComment.head_pic}" width="25px" height="25px">
+                        <span><a href="{:U('Member/index',array('member_id'=>$articleComment['member_id']),'html')}">{$articleComment.member_name}</a></span><span class="comment_time">{$articleComment.comment_time}</span></p>
+                    <p>{$articleComment.comment_content}</p>
+                </div>
+            </volist>
+            </div>
+        </div>
+        <if condition="$pageCount gt 0">
+        <div class="page_div" id="page_div">
+            <span class="page"><a href="javascript:void(0);">首页</a></span>
+            <span class="page"><a href="javascript:void(0);">上一页</a></span>
+            <label id="curpage">1</label> /
+            <label id="page_count">{$pageCount}</label>
+            <if condition="$pageCount gt 1">
+                <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                <span class="page hov"><a href="javascript:void(0);" rel="{$pageCount}">末页</a></span>
+                <else />
+                <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                <span class="page"><a href="javascript:void(0);">末页</a></span>
+            </if>
+
+            <span>
+                <select id="toPageSize">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                </select>
+            </span>
+            <span>
+                <input type="text" id="page_text" class="page_text" />
+                <input type="button" value="跳转" id="toPage" />
+            </span>
+            <span>共{$article.article_comment_count}条评论</span>
+        </div>
+        </if>
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

@@ -1,0 +1,10 @@
+/*分页条*/
+.page_div{width:960px;margin:10px auto;bottom:5px;text-align: center;}
+.page_div span{margin:0 5px;}
+.page_div span.page{padding:5px 5px;border:solid #999 1px;cursor: pointer;border-radius: 5px;}
+.page_div span.hov{background:#999;color:#fff;border:none;}
+.page_div span.hov a{color:#fff;}
+.page_div span.hov:hover{background:#333;color:#fff;}
+.page_div label{font-size: 18px;}
+.page_div select{height: 30px;}
+.page_text{width:20px;height:20px;font-size:18px;}

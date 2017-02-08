@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" href="{$Think.config.CSS}admin.css" />
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="main_div">
+    <div class="left_div">
+        <div class="left_menu">
+            <ul>
+                <a href="{$Think.config.HOST_DIR}Home/Member/info.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>我的资料</li></a>
+                <a href="{$Think.config.HOST_DIR}Home/Member/personArticle.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>我的文章</li></a>
+                <a href="{$Think.config.HOST_DIR}Home/Member/personArticleType.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>我的文章分类</li></a>
+                <a href="{$Think.config.HOST_DIR}Home/Member/personPhoto.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>我的相册</li></a>
+                <a href="{$Think.config.HOST_DIR}Home/Member/personMess.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>我的留言板</li></a>
+                <a href="{$Think.config.HOST_DIR}Home/Member/updatePasswd.{$Think.config.URL_HTML_SUFFIX}" target="right"><li>修改密码</li></a>
+            </ul>
+        </div>
+    </div>
+    <div class="right_div">
+        <iframe name="right" class="main_area" src="{$Think.config.HOST_DIR}Home/Member/info.{$Think.config.URL_HTML_SUFFIX}">
+
+        </iframe>
+    </div>
+    <div class="clear"></div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

@@ -1,0 +1,19 @@
+.article{width:1000px;margin:10px auto;min-height:600px;}
+.article_type_div{float:left;width:175px;padding:5px;border:solid #eee 1px;}
+.article_type_div p{margin-top:0;font-size:16px;font-weight: bold;}
+.article_type_div p img{float: left;margin-right:10px; border:solid #999 1px;border-radius: 15px;}
+.article_type_div p a{font-size:20px;}
+.article_type_div li{width:170px;line-height:24px;list-style: none;text-align: center;margin-top:5px;margin-left:-40px;border-radius: 5px;}
+.article_type_div li.op,.article_type_div li:hover{background:#999;color:#fff;cursor: pointer;}
+.article_type_div li.op a,.article_type_div li:hover a{color:#fff;}
+
+.article_div{float:left;width:790px;margin-left:10px;padding:5px;border:solid #eee 1px;}
+.article_list_title{border-bottom:solid #ddd 1px;padding:5px 0;}
+.article_list_title span{font-weight: bold;}
+.article_list_div p{line-height: 16px;}
+.article_list_div p a:hover{text-decoration: underline;cursor: pointer;}
+.article_list_div p span{float: right;}
+/*热门文章排行列表*/
+.hotArticle_div{width:990px;min-height:600px;margin:10px auto;padding:5px;border:solid #eee 1px;}
+.hotArticle_div .article_list_title a{color:#000;}
+.hotArticle_div .article_list_title a:hover{text-decoration: underline;}

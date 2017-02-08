@@ -1,0 +1,12 @@
+.photo{width:1000px;margin:10px auto;}
+.photo_type_div{float:left;width:175px;padding:5px;border:solid #eee 1px;}
+.photo_type_div p{margin-top:0;font-size:16px;font-weight: bold;}
+.photo_type_div p img{float: left;margin-right:10px;border:solid #ddd 1px;border-radius: 15px;}
+.photo_type_div p a{font-size:20px;}
+.photo_type_div li{width:170px;line-height:24px;list-style: none;text-align: center;margin-top:5px;margin-left:-40px;border-radius: 5px;}
+.photo_type_div li.op,.photo_type_div li:hover{background:#999;color:#fff;cursor: pointer;}
+.photo_type_div li.op a,.photo_type_div li:hover a{color:#fff;}
+
+.photo_div{float:left;width:790px;margin-left:10px;padding:5px;border:solid #eee 1px;min-height:500px;}
+.photo_list_title{border-bottom:solid #ddd 1px;padding:5px 0;}
+.photo_list_title span{font-weight: bold;}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}admin.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}info.css" />
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="main" >
+    <include file="./Application/Home/View/left.html" />
+    <div class="right_div">
+        <div class="info_title">
+            <span>修改密码</span>
+        </div>
+        <form id="info_form" action="{:U('Member/updatePasswd')}" name="info_form" method="post">
+            <table class="info_table" cellspacing="1" cellpadding="0" style="width: 300px;height:150px;">
+                <tr>
+                    <th width="100">原始密码：</th>
+                    <td width="200"><input type="password" name='old_passwd' id="old_passwd" required /></td>
+                </tr>
+                <tr>
+                    <th width="100">新的密码：</th>
+                    <td width="200"><input type="password" name='passwd' id="passwd" required /></td>
+                </tr>
+                <tr>
+                    <th width="100">确认密码：</th>
+                    <td width="200"><input type="password" name='passwd2' id="passwd2" required /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="保存" />&nbsp;
+                        <input type="reset" value="重置" />
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="3" style="color:#f30;">{$msg}</td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+
+</body>
+</html>

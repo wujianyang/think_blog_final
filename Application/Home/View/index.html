@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}index.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}ajax.js"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.config.js" charset="utf-8"></script>
+    <script src="{$Think.config.PLUGINS}ueditor/ueditor.all.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8" src="{$Think.config.PLUGINS}ueditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="main_area">
+    <include file="./Application/Home/View/logoArea.html" />
+    <div class="show_area">
+        <div class="left_area">
+            <div class="left_title">
+                <span>文章列表</span>
+            </div>
+            <volist name="article" id="article" offset="0" length="5" empty="$empty">
+                <div class="article_area">
+                    <p class="article_title"><a href="{:U('Article/index',array('article_id'=>$article['article_id']),'html')}" title="{$article.title}" target="_blank">{$article.title|substr_mb=0,80,'utf-8'}</a></p>
+                    <p class="article_content">{$article.content|strip_tags|substr_mb=0,105,'utf-8'}</p>
+                    <div class="article_info">
+                        <div class="article_author">作者：<a href="{:U('Member/index',array('member_id'=>$article['member_id']))}">{$article.member_name}</a></div>
+                        <div class="article_type">文章类型：<a href="{:U('Article/articleList',array('article_type_id'=>$article['article_type_id']))}">{$article.article_type_name}</a></div>
+                        <div class="article_time">撰写时间：{$article.create_time}</div>
+                        <div class="article_hitnum">访问量：{$article.hitnum}</div>
+                        <div class="article_comment"><a href="{:U('Article/index#comment',array('article_id'=>$article['article_id']))}" target="_blank">评论({$article.article_comment_count})</a></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </volist>
+        </div>
+        <div class="right_area">
+            <div class="member_div">
+                <div class="member_title">
+                    <span>用户排行</span>
+                </div>
+                <div class="member_list">
+                    <volist name="member" id="member" offset="0" length="30" empty="$empty">
+                        <div class="member_d"><a href="{:U('Member/index',array('member_id'=>$member['id']))}" title="{$member.member_name}">
+                            <img src="{$Think.config.UPLOAD}{$member.head_pic}" width="30" height="30" />
+                            {$member.member_name|substr_mb=0,15,'utf-8'}(<span>{$member.hitnum}</span>)
+                        </a></div>
+                    </volist>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

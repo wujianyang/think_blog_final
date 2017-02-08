@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <if condition="$data.member neq null">
+            热门文章排行
+            <else />
+            文章列表
+        </if>
+        _{$Think.config.TITLE}
+    </title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}page.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}articleList.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}admin/common.js"></script>
+    <script src="{$Think.config.JS}home/page.js"></script>
+    <script type="text/javascript">
+        //热门文章列表显示
+        function showList(page,page_size,keyItem,key,com){
+            page=page||1;
+            page_size=page_size||20;
+
+            var host_dir=$('#host_dir').val();
+            var page_search=$('#page_search').val();
+            var key_search=$('#keys_search').val();
+            var keyItem_search=$('#keyItem_search').val();
+            var member_id=$('#member_id').val();
+            var ajax_data='{';
+            ajax_data+='page:"'+page+'",page_size:"'+page_size+'"';
+            if(page_search=='search'){
+                var type='get';
+                var url=host_dir+"Home/Index/search";
+                ajax_data+=',key:"'+key_search+'",keyItem:"article"';
+            }else{
+                var type='post';
+                var url=host_dir+"Home/Article/hotArticleList";
+                ajax_data+=',member_id:"'+member_id+'"';
+            }
+            ajax_data+='}';
+
+            var sHtml_loading='<div class="loading"><img src="'+host_dir+'Public/images/loading.gif" width="100px" /></div>';
+            $('#article_list_div').html(sHtml_loading);
+            $.ajax({
+                url:url,
+                type:type,
+                data:eval('(' + ajax_data + ')'),
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        var sHtml='';
+                        var hotArticle=data.rows;
+                        if(hotArticle.length>0) {
+                            //拼接数据列表
+                            for (var i = 0; i < hotArticle.length; i++) {
+                                sHtml+='<p>';
+                                if(page_search=='search'){
+                                    sHtml+='<a href="{$Think.config.HOST_DIR}Home/Member/index/member_id/'+hotArticle[i]['member_id']+'.{$Think.config.URL_HTML_SUFFIX}">['+hotArticle[i]['member_name']+']</a>';
+                                }
+                                sHtml+='<a href="{$Think.config.HOST_DIR}Home/Article/index/article_id/'+hotArticle[i]['id']+'.{$Think.config.URL_HTML_SUFFIX}" title="'+hotArticle[i]['title']+'" target="_target">'+str_sub(hotArticle[i]['title'],60)+'</a>';
+                                sHtml+='<span>'+hotArticle[i]['create_time']+'</span>';
+                                sHtml+='</p>';
+                                if(i%5 == 4){
+                                    sHtml+='<p class="line"></p>';
+                                }
+                            }
+                            $('#article_list_div').html(sHtml);
+                            //生成分页条
+                            getPageBar(page,Math.ceil(data.count/page_size),data.count,page_size);
+                        }else{
+                            $('#article_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                        }
+                    }else{
+                        $('#article_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                    }
+                },
+                error:function(data){
+                    console.log('showList>error');
+                    console.log(data.responseText);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<input type="hidden" value="{$data.member.id}" id="member_id" />
+<div class="hotArticle_div">
+    <div class="article_list_title">
+        <span>
+            <if condition="$data.member neq null">
+                <a href="{:U('Member/index',array('member_id'=>$data['member']['id']))}">{$data.member.member_name}</a> >>热门文章排行
+            <else />
+                文章列表
+                <input type="hidden" value="search" id="page_search" />
+                <input type="hidden" value="{$Think.get.key}" id="keys_search" />
+                <input type="hidden" value="article" id="keyItem_search" />
+            </if>
+
+        </span>
+    </div>
+    <div class="article_list_div" id="article_list_div">
+        <volist name="data.rows" id="rows" offset="0" empty="$empty">
+            <p>
+                <if condition="$rows.member_id neq null">
+                    <a href="{:U('Member/index',array('member_id'=>$rows['member_id']))}">[{$rows.member_name}]</a>
+                </if>
+                <a href="{:U('Article/index',array('article_id'=>$rows['article_id']))}" title="{$rows.title}" target="_blank">{$rows.title|substr_mb=0,60,'utf-8'}</a>
+                <span>{$rows.create_time}</span>
+            </p>
+            <if condition="$key%5 eq 4">
+                <p class="line"></p>
+            </if>
+        </volist>
+    </div>
+    <if condition="$data.pageCount gt 0">
+        <div class="page_div" id="page_div">
+            <span class="page"><a href="javascript:void(0);">首页</a></span>
+            <span class="page"><a href="javascript:void(0);">上一页</a></span>
+            <label id="curpage">1</label> /
+            <label id="page_count">{$data.pageCount}</label>
+            <if condition="$data.pageCount eq 1">
+                <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                <span class="page"><a href="javascript:void(0);">末页</a></span>
+                <else />
+                <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                <span class="page hov"><a href="javascript:void(0);" rel="{$data.pageCount}">末页</a></span>
+            </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+            <span>共{$data.count}条数据</span>
+        </div>
+    </if>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

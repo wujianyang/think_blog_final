@@ -1,0 +1,34 @@
+<php>
+    $action="__ACTION__";
+    $action=explode("/",$action);
+    $model=$action[count($action)-2];
+    $action=$action[count($action)-1];
+</php>
+<div class="top">
+    <div class="person_top">
+        <a href="{:C('HOST_DIR')}">网站首页</a>
+        <if condition="$Think.session.MEMBER eq null">
+            <a href="{:U('Member/login')}">登录</a>
+            <a href="{:U('Member/register')}">注册</a>
+        <else />
+            <a href="{:U('Member/index')}">我的主页</a>
+            <a href="{:U('Member/info')}">{$Think.session.MEMBER.member_name}</a>
+            <a href="{:U('Member/logout')}">退出</a>
+        </if>
+    </div>
+    <div class="search_top">
+        <form action="{$Think.config.HOST_DIR}Home/Index/search" name="search_form" method="get">
+        <select name="keyItem" id="keyItem_search">
+            <option value="member">用户</option>
+            <option value="article">文章</option>
+        </select>
+        <input type="text" name="key" id="key_search" placeholder="请输入关键字" required />
+        <input type="submit" value="搜索" />
+        </form>
+    </div>
+    <div class="clear"></div>
+    <input type="hidden" value="{$Think.config.HOST_DIR}" id="host_dir" />
+    <input type="hidden" value="{$Think.config.UPLOAD}" id="upload" />
+    <input type="hidden" value="{$Think.config.UPLOAD_PATH}" id="upload_path" />
+    <input type="hidden" value="{$Think.config.URL_HTML_SUFFIX}" id="suffix" />
+</div>

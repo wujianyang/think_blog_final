@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>留言板_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}page.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}mess.css" />
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}admin/common.js"></script>
+    <script src="{$Think.config.JS}home/page.js"></script>
+    <script type="text/javascript">
+        //留言板列表显示
+        function showList(page,page_size,keyItem,key,com){
+            page=page||1;
+            page_size=page_size||10;
+            keyItem=keyItem||'id';
+            key=key||'';
+            com=com||'eq';
+            var member_id=$('#member_id').val();
+            var sHtml_loading='<div class="loading"><img src="{$Think.config.HOST_DIR}Public/images/loading.gif" width="100px" /></div>';
+            $('#mess_list_div').html(sHtml_loading);
+            $.ajax({
+                url:"{$Think.config.HOST_DIR}Home/Mess/index",
+                type:"post",
+                data:{"page":page,"page_size":page_size,member_id:member_id},
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        var sHtml='';
+                        var mess=data.rows;
+                        if(mess.length>0) {
+                            //拼接数据列表
+                            for (var i = 0; i < mess.length; i++) {
+                                sHtml+='<div class="mess_list_d">';
+                                sHtml+='<p>';
+                                sHtml+='<img src="{$Think.config.UPLOAD}'+mess[i]['head_pic']+'" width="24px" height="24px" />';
+                                sHtml+='<span><a href="{$Think.config.HOST_DIR}Home/Member/index/member_id/'+mess[i]['member_id']+'.{$Think.config.URL_HTML_SUFFIX}">'+mess[i]['member_name']+'</a></span>';
+                                sHtml+='<span class="mess_time">'+mess[i]['mess_time']+'</span>';
+                                sHtml+='</p>';
+                                sHtml+='<p class="mess_content">'+mess[i]['content']+'</p>';
+                                sHtml+='</div>';
+                            }
+                            $('#mess_list_div').html(sHtml);
+                            //生成分页条
+                            getPageBar(page,Math.ceil(data.count/page_size),data.count,page_size);
+                        }else{
+                            $('#mess_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                        }
+                    }else{
+                        $('#mess_list_div').html('<p class="noData">'+data['msg']+'</p>');
+                    }
+                },
+                error:function(data){
+                    console.log('showList>error');
+                    console.log(data.responseText);
+                }
+            });
+        }
+        //分页条(当前页码,页码总数,总记录数,每页条数)
+        function getPageBar(cur_page,page_count,total,page_size){
+            cur_page=parseInt(cur_page);
+            page_count=parseInt(page_count);
+            total=parseInt(total);
+            page_size=parseInt(page_size);
+            var pageStr='';
+            if(cur_page>page_count) //页码大于最大页数
+                cur_page=page_count;
+            if(cur_page<1)  //页码小于1
+                cur_page=1;
+
+            if(cur_page==1){    //如果是第一页
+                pageStr+='<span class="page"><a href="javascript:void(0);">首页</a></span>';
+                pageStr+='<span class="page"><a href="javascript:void(0);">上一页</a></span>';
+            }else{
+                pageStr+='<span class="page hov"><a href="javascript:void(0);" rel="1">首页</a></span>';
+                pageStr+='<span class="page hov"><a href="javascript:void(0);" rel="'+(cur_page-1)+'">上一页</a></span>';
+            }
+
+            pageStr+='<label id="curpage">'+cur_page+'</label> / <label id="page_count">'+page_count+'</label>';
+
+            if(cur_page>=page_count){   //如果是最后一页
+                pageStr+='<span class="page"><a href="javascript:void(0);">下一页</a></span>';
+                pageStr+='<span class="page"><a href="javascript:void(0);">末页</a></span>';
+            }else{
+                pageStr+='<span class="page hov"><a href="javascript:void(0);" rel="'+(cur_page+1)+'">下一页</a></span>';
+                pageStr+='<span class="page hov"><a href="javascript:void(0);" rel="'+page_count+'">末页</a></span>';
+            }
+
+            pageStr+='<span><select id="toPageSize">';
+            for(var i=1;i<=5;i++){
+                if(parseInt(page_size)/10==i){
+                    pageStr+='<option value="'+i*10+'" selected="selected">'+i*10+'</option>';
+                }else{
+                    pageStr+='<option value="'+i*10+'">'+i*10+'</option>';
+                }
+            }
+            pageStr+='</select></span>';
+            pageStr+='<span><input type="text" id="page_text" class="page_text" /><input type="button" value="跳转" id="toPage" /></span>';
+            pageStr+='<span>共'+total+'条数据</span>';
+            $('#page_div').html(pageStr);
+            $('#page_div').show();
+        }
+    </script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<input type="hidden" value="{$data.member.id}" id="member_id" />
+<div class="mess_div">
+   <div class="mess_title">
+       <span><a href="{:U('Member/index',array('member_id'=>$data['member']['id']))}">{$data['member'].member_name}</a></span>
+       >>
+       <span>留言板</span>
+   </div>
+    <div class="mess_list_div" id="mess_list_div">
+        <volist name="data.rows" id="rows" offset="0" empty="$empty">
+            <div class="mess_list_d">
+                <p>
+                    <img src="{$Think.config.UPLOAD}{$rows.head_pic}" width="24px" height="24px" />
+                    <span><a href="{:U('Member/index',array('member_id'=>$rows['messer_id']))}">{$rows.member_name}</a></span>
+                    <span class="mess_time">{$rows.mess_time}</span>
+                </p>
+                <p class="mess_content">{$rows.content}</p>
+            </div>
+        </volist>
+    </div>
+    <!--分页条-->
+    <if condition="$data.pageCount gt 0">
+        <div class="page_div" id="page_div">
+            <span class="page"><a href="javascript:void(0);">首页</a></span>
+            <span class="page"><a href="javascript:void(0);">上一页</a></span>
+            <label id="curpage">1</label> /
+            <label id="page_count">{$data.pageCount}</label>
+            <if condition="$data.pageCount eq 1">
+                <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                <span class="page"><a href="javascript:void(0);">末页</a></span>
+                <else />
+                <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                <span class="page hov"><a href="javascript:void(0);" rel="{$data.pageCount}">末页</a></span>
+            </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+            <span>共{$data.count}条数据</span>
+        </div>
+    </if>
+</div>
+<include file="./Application/Home/View/footer.html" />
+</body>
+</html>

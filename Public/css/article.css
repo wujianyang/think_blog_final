@@ -1,0 +1,20 @@
+.article_div{width:990px;border:solid #eee 1px;margin:10px auto;padding:5px;}
+.article_title{width:1000px;text-align: center;padding:0 20px;}
+.article_title h1{font-size: 24px;}
+.article_info{text-align: center;}
+.article_info label{padding:10px;color:#999;}
+.article_info label a:hover{text-decoration: underline;color:#666;}
+.article_content{padding:20px;width:960px;overflow-x: scroll;}
+.comment_div{width:960px;margin:0 auto;}
+.comment_div #editor{margin-top:10px;}
+.comment_div #comment{float: right;margin-top:5px;}
+.comment_title{border-bottom: solid #999 1px;padding:5px 0;margin-bottom:10px;}
+.comment_title span{font-weight:bold;}
+.comment_list{padding:5px 0;color:#666;}
+.comment_list .comment_list_title{border-left:solid 5px;padding:5px;}
+.comment_list .comment_d{margin-top:10px;padding:5px;border-radius:10px;background:#eff;}
+.comment_list .comment_d .comment_member{float: left;margin:-5px 10px 0 0;border-radius: 20px;}
+.comment_list .comment_d a{color:#666;}
+.comment_list .comment_d a:hover{color:#333;text-decoration: underline;}
+.comment_list .comment_d .comment_time{float: right;}
+.comment_list .comment_d p{line-height: 16px;}

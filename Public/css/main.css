@@ -1,0 +1,30 @@
+body,div,p,span,ul,li,a,h1,h2,h3,h4,h5,h6{
+    font-family:微软雅黑;
+    font-size:14px;}
+a{text-decoration:none;color:#999;}
+.lfloat{float: left;}
+.rfloat{float: right;}
+.mar_t20{margin-top:20px;}
+.clear{clear:both;}
+
+.header{height:100px;background:#666;}
+.footer{width:1000px;margin:10px auto;background:#fff;text-align:center;}
+.top{height:30px;width:1000px;margin:0 auto;background: #eee;}
+.noData{text-align: center;}
+
+/*头部个人中心*/
+.person_top{float: left;padding:5px;}
+.person_top a:hover{text-decoration: underline;}
+.search_top{float: right;padding:5px;}
+.loading{width:100px;margin:10px auto;}
+
+/*字体大小*/
+.fontBar span{cursor: pointer;}
+.fontBar .hov{font-size: 16px;font-weight: bold;}
+.font0,.font0 div,.font0 p,.font0 a,.font0 li{font-size:12px;}
+.font1,.font1 div,.font1 p,.font1 a,.font1 li{font-size:16px;}
+.font2,.font2 div,.font2 p,.font2 a,.font2 li{font-size:20px;}
+
+/*列表分割线*/
+.line{border-top:dashed #999 1px;}
+

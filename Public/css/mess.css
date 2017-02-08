@@ -1,0 +1,11 @@
+.mess_div{width:990px;margin:10px auto;padding:5px;border:solid #ddd 1px;min-height:500px;}
+.mess_title{padding:5px 0;border-bottom:solid #ccc 1px;font-weight:bold;}
+.mess_title a{color:#000;}
+.mess_title a:hover{text-decoration: underline;}
+.mess_list_d{background:#eee;border-radius: 10px;padding:5px;margin-top:10px;color:#999;}
+.mess_list_d p{line-height: 18px;}
+.mess_list_d p a{font-size: 16px;}
+.mess_list_d p a:hover{color:#333;text-decoration: underline;}
+.mess_list_d p img{float:left;margin:-5px 10px 0 0;border:solid #999 1px;border-radius: 12px;}
+.mess_list_d p .mess_time{float:right;}
+.mess_list_d .mess_content{line-height: 20px;}

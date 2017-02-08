@@ -1,0 +1,24 @@
+<div class="left_div">
+    <div class="left_menu">
+        <ul>
+            <a href="{$Think.config.HOST_DIR}Home/Member/info">
+                <li <php> if($action=="info") echo "class='sel'"; </php>>我的资料</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Home/Member/personArticle">
+                <li <php> if($action=="personArticle") echo "class='sel'"; </php>>我的文章</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Home/Member/personArticleType">
+                <li <php> if($action=="personArticleType") echo "class='sel'"; </php>>我的文章分类</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Home/Member/personPhoto">
+                <li <php> if($action=="personPhoto") echo "class='sel'"; </php>>我的相册</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Home/Member/personMess">
+                <li <php> if($action=="personMess") echo "class='sel'"; </php>>我的留言板</li>
+            </a>
+            <a href="{$Think.config.HOST_DIR}Home/Member/updatePasswd">
+                <li <php> if($action=="updatePasswd") echo "class='sel'"; </php>>修改密码</li>
+            </a>
+        </ul>
+    </div>
+</div>

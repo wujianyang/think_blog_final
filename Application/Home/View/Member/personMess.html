@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的留言板_{$Think.config.TITLE}</title>
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}main.css" />
+    <link rel="stylesheet" type="text/css" href="{$Think.config.CSS}admin.css" />
+    <style type="text/css">
+        .info_title{border-bottom: solid #999 1px;font-weight: bold;padding:5px 0;}
+        .list_table{width:1100px;margin:0 auto;}
+        .info_table #title,.info_table #title_edit{width:800px;font-size: 18px;}
+    </style>
+    <script src="{$Think.config.JS}jquery-1.8.3.min.js"></script>
+    <script src="{$Think.config.JS}ajax.js"></script>
+    <script src="{$Think.config.JS}admin/common.js"></script>
+    <script src="{$Think.config.JS}admin/page.js"></script>
+    <script src="{$Think.config.JS}home/personMess.js"></script>
+</head>
+<body>
+<include file="./Application/Home/View/top.html" />
+<div class="main" >
+    <include file="./Application/Home/View/left.html" />
+    <div class="right_div">
+        <div class="info_title">
+            <span>我的留言板</span>
+            <input type="hidden" value="{$Think.config.HOST_DIR}" id="host_dir" />
+            <input type="hidden" value="{$Think.config.UPLOAD}" id="upload" />
+            <input type="hidden" value="{$Think.config.UPLOAD_PATH}" id="upload_path" />
+            <input type="hidden" value="{$Think.config.URL_HTML_SUFFIX}" id="suffix" />
+        </div>
+        <div class="main_form">
+            <div id="list_div">
+                <div class="toolbar">
+                    <div class="lfloat">
+                        <input type="button" value="删除" id="del" />
+                    </div>
+                    <div class="rfloat">
+                        <select id="keyItem">
+                            <option value="id+eq">ID</option>
+                            <option value="messer_id+eq">用户ID</option>
+                            <option value="member_name+like">用户名</option>
+                            <option value="content+like">留言内容</option>
+                        </select>
+                        <input name="key" id="key" value="" placeholder="请输入关键字" required />
+                        <input type="button" value="搜索" id="search" />
+                    </div>
+                </div>
+                <div class="list_table_div mar_t20">
+                    <table class="list_table" id="" cellspacing="1" cellpadding="0">
+                        <tr>
+                            <th><input type="checkbox" name="" id="all_id" /></th>
+                            <th width="50">ID</th>
+                            <th width="50">用户ID</th>
+                            <th width="150">用户名</th>
+                            <th width="700">评论内容</th>
+                            <th width="150">评论时间</th>
+                        </tr>
+                        <tbody id="list_table_tbody">
+                        <volist name="data.rows" id="rows" offset="0" length="10">
+                            <tr class="tr_line">
+                                <td><input type="checkbox" class="id" name="id[]" value="{$rows.mess_id}" /></td>
+                                <td width="50">{$rows.mess_id}</td>
+                                <td width="50">{$rows.messer_id}</td>
+                                <td width="150">{$rows.member_name}</td>
+                                <td width="700">{$rows.content}</td>
+                                <td width="150">{$rows.mess_time}</td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                    <if condition="$data['rows'] eq null">
+                        {$empty}
+                    </if>
+                </div>
+                <if condition="$data.pageCount gt 0">
+                    <div class="page_div" id="page_div">
+                        <span class="page"><a href="javascript:void(0);">首页</a></span>
+                        <span class="page"><a href="javascript:void(0);">上一页</a></span>
+                        <label id="curpage">1</label> /
+                        <label id="page_count">{$data.pageCount}</label>
+                        <if condition="$data.pageCount eq 1">
+                            <span class="page"><a href="javascript:void(0);">下一页</a></span>
+                            <span class="page"><a href="javascript:void(0);">末页</a></span>
+                            <else />
+                            <span class="page hov"><a href="javascript:void(0);" rel="2">下一页</a></span>
+                            <span class="page hov"><a href="javascript:void(0);" rel="{$data.pageCount}">末页</a></span>
+                        </if>
+                <span>
+                    <select id="toPageSize">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </span>
+                <span>
+                    <input type="text" id="page_text" class="page_text" />
+                    <input type="button" value="跳转" id="toPage" />
+                </span>
+                        <span>共{$data.count}条数据</span>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="./Application/Home/View/footer.html" />
+
+</body>
+</html>
