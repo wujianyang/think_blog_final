@@ -85,6 +85,7 @@ class MemberModel extends CommonModel{
         $data['status']=0;
         $data['msg']='';
 
+        $member_name=$this->member_name;
         $result=$this->field('id')->where(array('member_name'=>$this->member_name))->select();
         if(count($result) > 0){
             $result=$this->field('id')->where(array('member_name'=>$this->member_name,'passwd'=>md5($this->passwd)))->select();
@@ -92,6 +93,8 @@ class MemberModel extends CommonModel{
                 $data['status']=1;
                 $data['msg']='登录成功';
                 $data['member']=array('id'=>$result[0]['id'],'member_name'=>$this->member_name);
+                $result=$this->data(array('last_ip'=>get_client_ip(),'last_time'=>date("Y-m-d h:i:s",time())))->where(array('member_name'=>$member_name))->save();
+
             }elseif(count($result) == 0){
                 $data['msg']='用户名或密码错误';
             }
@@ -441,6 +444,24 @@ class MemberModel extends CommonModel{
         }else{
             $data['msg']='密码修改失败';
         }
+        unset($result);
+        return $data;
+    }
+
+    public function lastIpTime(){
+        $data=array();
+        $data['status']=0;
+        $data['msg']='';
+
+        $result=$this->data(array('last_ip'=>$this->last_ip,'last_time'=>$this->last_time))->where(array('member_name'=>$this->member_name))->save();
+        if($result!==false && $result>0){
+            $data['status']=1;
+            $data['msg']='上次登录IP和上次登录时间修改成功';
+        }else{
+            $data['msg']='上次登录IP和上次登录时间修改失败';
+        }
+        var_dump($data);
+
         unset($result);
         return $data;
     }
